@@ -13,45 +13,57 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 Servo myservo;
+Servo myservo2;
 //setts up arduino componets
 const int buttonPin = 3;
+const int buttonPin2 = 5;
 const int sensor = 10;
 int i = 0;
 int u = 0;
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
-//starts the servo, button, sensor and display
+//starts the servo, buttons, sensor and display
 void setup() {
   // put your setup code here, to run once:
-myservo.attach(9);
-pinMode(buttonPin, INPUT);
-Serial.begin(9600);
-pinMode(sensor, INPUT);
+  myservo.attach(9);
+  myservo2.attach(11);
+  pinMode(buttonPin, INPUT);
+  pinMode(buttonPin2, INPUT);
+  Serial.begin(9600);
+  pinMode(sensor, INPUT);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  }
 }
+
 
 void loop() {
   // put your main code here, to run repeatedly:
   //moves servo if button is pressed
-  if (digitalRead(buttonPin)){
+  if (digitalRead(buttonPin)) {
     myservo.write(70);
-    }
+  }
 
-    else {
+  else {
     myservo.write(0);
   }
+  if (digitalRead(buttonPin2)) {
+    myservo2.write(70);
+  }
+
+  else {
+    myservo2.write(0);
+  }
   //if else for giving points if the sensor senses movement and only gives one point without delay
-  if (digitalRead(sensor)){
-       Serial.print(i);
-       u = 1;
-    }
-    else if (u == 1){
-      i = i+1;
-      u = 0;
-    }
-//Gives the oled screen instructions on how it should work
+  if (digitalRead(sensor)) {
+    Serial.print(i);
+    u = 1;
+  } else if (u == 1) {
+    i = i + 1;
+    u = 0;
+  }
+  //Gives the oled screen instructions on how it should work
   display.clearDisplay();
   display.setTextSize(3);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(20, 20);
   display.println(i);
   display.display();
 }
